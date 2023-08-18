@@ -1,16 +1,21 @@
-import './App.css';
 import {
   Route,
+  RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
-  RouterProvider,
 } from 'react-router-dom';
+import './App.css';
+import { Header } from './components/molecules/Header';
+import { Companies } from './pages/Companies';
 import { Home } from './pages/Home';
+import { Suppliers } from './pages/Suppliers';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Home />}>
-      <Route index element={<Home />}></Route>
+    <Route path="/" element={<Header />}>
+      <Route index={true} element={<Home />} />
+      <Route path="/companies" element={<Companies />} />
+      <Route path="/suppliers" element={<Suppliers />} />
     </Route>,
   ),
 );

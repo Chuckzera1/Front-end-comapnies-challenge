@@ -1,12 +1,18 @@
-import { ReactNode } from 'react';
 import { defaultButtonStyle } from './styles';
 
+export type ButtonVariant = 'primary' | 'secondary' | 'outlined' | 'danger';
+
 type ButtonProps = {
-  children: ReactNode | string;
+  variant?: ButtonVariant;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export const Button = ({ children, className, ...rest }: ButtonProps) => {
-  const classNameStyles = className || defaultButtonStyle;
+export const Button = ({
+  children,
+  className,
+  variant = 'primary',
+  ...rest
+}: ButtonProps) => {
+  const classNameStyles = className || defaultButtonStyle(variant);
   return (
     <button className={classNameStyles} {...rest}>
       {children}
