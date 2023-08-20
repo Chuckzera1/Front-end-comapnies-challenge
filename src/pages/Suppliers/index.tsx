@@ -1,63 +1,47 @@
-import clsx from 'clsx';
+import * as yup from 'yup';
 import { Input } from '../../components/atoms/Input';
-import { DialogDemo } from '../../components/molecules/Dialog';
+import { Dialog } from '../../components/molecules/Dialog';
 import { Table } from '../../components/molecules/Table';
 import { mockedData } from '../Home';
 import { Title } from '../../components/atoms/Title';
+import { validateCep } from '../../utils';
+import { Supplier } from '../../types/entities/supplier';
+import { SupplierForm } from '../../components/organisms/SuppliersForm';
+
+export type FormSupplierValues = Omit<Supplier, 'id'>;
+
+const formSchema = yup.object().shape({
+  name: yup.string().required('Nome Fantasia Obrigatório'),
+  email: yup.string().email().required('Email is required'),
+  document: yup.string().required('Documento é obrigatório').length(14),
+  documentType: yup.mixed().oneOf(['cnpj', 'cpf']),
+  rg: yup
+    .string()
+    .when('documentType', { is: 'cpf', then: schema => schema.required() }),
+  birthDate: yup.date().required(),
+  cep: yup
+    .string()
+    .required('CEP é obrigatório')
+    .test('Validação CEP', 'CEP Inválido', validateCep),
+});
 
 export const Suppliers = () => {
+  const onSubmit = (values: FormSupplierValues) => {
+    console.log('Submit: ', values);
+  };
+
   return (
     <div className="flex flex-col gap-8 mb-6">
       <Title>Fornecedores</Title>
       <div className="flex justify-between">
         <Input placeholder="Pesquisar" />
-        <DialogDemo
+        <Dialog
           buttonLabel="Novo Usuário"
           variant="saveOrCancel"
           title="Novo usuário"
           description="Adicionar usuário">
-          <form className="mt-2 space-y-2">
-            <fieldset>
-              {/* <legend>Choose your favorite monster</legend> */}
-              <label
-                htmlFor="firstName"
-                className="text-xs font-medium text-gray-700 dark:text-gray-400">
-                First Name
-              </label>
-              <input
-                id="firstName"
-                type="text"
-                placeholder="Tim"
-                autoComplete="given-name"
-                className={clsx(
-                  'mt-1 block w-full rounded-md',
-                  'text-sm text-gray-700 placeholder:text-gray-500 dark:text-gray-400 dark:placeholder:text-gray-600',
-                  'border border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-gray-800',
-                  'focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75',
-                )}
-              />
-            </fieldset>
-            <fieldset>
-              <label
-                htmlFor="familyName"
-                className="text-xs font-medium text-gray-700 dark:text-gray-400">
-                Family Name
-              </label>
-              <input
-                id="familyName"
-                type="text"
-                placeholder="Cook"
-                autoComplete="family-name"
-                className={clsx(
-                  'mt-1 block w-full rounded-md',
-                  'text-sm text-gray-700 placeholder:text-gray-500 dark:text-gray-400 dark:placeholder:text-gray-600',
-                  'border border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-gray-800',
-                  'focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75',
-                )}
-              />
-            </fieldset>
-          </form>
-        </DialogDemo>
+          <SupplierForm validationSchema={formSchema} onSubmit={onSubmit} />
+        </Dialog>
       </div>
       <Table keys={Object.keys(mockedData[0])} data={mockedData} />
     </div>

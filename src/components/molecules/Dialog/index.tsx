@@ -14,7 +14,7 @@ type DialogProps = {
   variant: 'confirmation' | 'saveOrCancel';
 };
 
-export const DialogDemo = ({
+export const Dialog = ({
   buttonLabel,
   buttonClassName,
   children,
@@ -59,14 +59,6 @@ export const DialogDemo = ({
                 {description}
               </DialogPrimitive.Description>
               {children}
-              <div className="mt-4 flex justify-end">
-                <DialogPrimitive.Close>
-                  <Button variant="danger">Cancel</Button>
-                </DialogPrimitive.Close>
-                <DialogPrimitive.Close>
-                  <Button variant="primary">Save</Button>
-                </DialogPrimitive.Close>
-              </div>
 
               <DialogPrimitive.Close className={DialogueClose}>
                 <Cross1Icon className="h-4 w-4 text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400" />

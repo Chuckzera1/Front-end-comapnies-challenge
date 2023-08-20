@@ -22,9 +22,9 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <>
+    <div className="h-screen">
       <RouterProvider router={router} />
-    </>
+    </div>
   );
 }
 

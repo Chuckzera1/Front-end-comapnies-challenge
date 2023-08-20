@@ -30,14 +30,14 @@ export const Home = () => {
     navigate('/suppliers');
   };
   return (
-    <div className="w-full h-full flex flex-col gap-8 justify-center items-center">
+    <div className="flex flex-col gap-8 justify-center items-center">
       <div className="flex flex-col justify-center">
         <Title>Olá! Seja bem vindo.</Title>
         <Subtitle className="self-center">
           Escolha qual listagem quer visualizar
         </Subtitle>
       </div>
-      <div className="w-full h-full flex justify-center gap-5">
+      <div className="flex justify-center gap-5">
         <Button variant="primary" onClick={handleCompaniesNavigation}>
           Empresas
         </Button>

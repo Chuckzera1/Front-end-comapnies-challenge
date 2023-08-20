@@ -14,9 +14,17 @@ interface TableProps {
   keys: string[];
   data: any[];
   className?: string;
+  handleOnEdit?: () => void;
+  handleOnDelete?: () => void;
 }
 
-export const Table = ({ keys, data, className }: TableProps) => {
+export const Table = ({
+  keys,
+  data,
+  className,
+  handleOnEdit,
+  handleOnDelete,
+}: TableProps) => {
   return (
     <table className={clsx(tableContainer, className)}>
       <thead className={tableHeader}>
@@ -43,10 +51,14 @@ export const Table = ({ keys, data, className }: TableProps) => {
               ),
             )}
             <td className="px-6 py-4 text-right">
-              <button className={tableBodyEdit}>Editar</button>
+              <button onClick={handleOnEdit} className={tableBodyEdit}>
+                Editar
+              </button>
             </td>
             <td className="px-6 py-4 text-right">
-              <button className={tableBodyRemove}>Deletar</button>
+              <button onClick={handleOnDelete} className={tableBodyRemove}>
+                Deletar
+              </button>
             </td>
           </tr>
         ))}
