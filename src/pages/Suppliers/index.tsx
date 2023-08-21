@@ -88,10 +88,10 @@ export const Suppliers = () => {
         <Dialog
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          buttonLabel="Novo Usuário"
+          buttonLabel="Novo Fornecedor"
           variant="saveOrCancel"
           title="Novo usuário"
-          description="Adicionar usuário">
+          description="Adicionar Fornecedor">
           <SupplierForm validationSchema={formSchema} onSubmit={onSubmit} />
         </Dialog>
       </div>
