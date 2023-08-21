@@ -43,3 +43,4 @@ There is a simple navigation bar to help with navigation when you are not on the
 Existem duas páginas. Um para gestão da Empresa e outro para gestão de Fornecedores.
 As duas páginas estão basicamente listando, criando, atualizando e excluindo suas respectivas entidades.
 Há uma barra de navegação simples para ajudar na navegação quando você não está na página inicial
+**O App também possui uma tratativa para temas Dark e Light**
