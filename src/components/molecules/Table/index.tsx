@@ -10,6 +10,7 @@ import {
   tableHeader,
 } from './styles';
 import { Company } from '../../../types/entities/company';
+import { format } from 'date-fns';
 
 interface TableProps {
   keys: string[];
@@ -28,6 +29,13 @@ export const Table = ({
   handleOnEdit,
   handleOnDelete,
 }: TableProps) => {
+  const getRowData = (key: string, value: any) => {
+    if (key !== 'birthDate' || !value)
+      return <td className="px-6 py-4">{value}</td>;
+    return (
+      <td className="px-6 py-4">{format(new Date(value), 'dd/MM/yyyy')}</td>
+    );
+  };
   return (
     <table className={clsx(tableContainer, className)}>
       <thead className={tableHeader}>
@@ -54,16 +62,11 @@ export const Table = ({
             <tr key={d.id}>
               {keys.map((key, index) =>
                 index === 0 ? (
-                  <th
-                    key={Math.random()}
-                    scope="row"
-                    className={tableBodyRowStrong}>
+                  <th scope="row" className={tableBodyRowStrong}>
                     {d[key]}
                   </th>
                 ) : (
-                  <td key={Math.random()} className="px-6 py-4">
-                    {d[key]}
-                  </td>
+                  getRowData(key, d[key])
                 ),
               )}
               <td className="px-6 py-4 text-right">

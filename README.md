@@ -1,27 +1,45 @@
+## Main Technologies:
+
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Env variables:
 
-Currently, two official plugins are available:
+- `VITE_BASE_API_URL` -> api Url -> Default `http://localhost:8080/api`
+- `VITE_CEP_LA_URL` -> CEP validator Url -> Default `http://cep.la`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# To run the app:
 
-## Expanding the ESLint configuration
+## Must populate env variables
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- It's necessary to clone de repo and run `yarn` and then `yarn dev`
+- By default will run at port `5173`
 
-- Configure the top-level `parserOptions` property like this:
+# About the App
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+There are two pages. One for Company management and the other for Supplier management.
+The two pages are basically listing, creating, updating and deleting their respective entities.
+There is a simple navigation bar to help with navigation when you are not on the homepage.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+---
+
+## Tecnologias Principais:
+
+# React + TypeScript + Vite
+
+# Variáveis de Ambiente:
+
+- `VITE_BASE_API_URL` -> Url base da api -> Default `http://localhost:8080/api`
+- `VITE_CEP_LA_URL` -> Url do validador de CEP -> Default `http://cep.la`
+
+# Para rodar o app:
+
+## Deve popular as variáveis de ambiente
+
+- É necessário clonar o repositória e rodar `yarn` e depois `yarn dev`. Ambos dentro da pasta do projeto
+- By default will run at port `5173`
+
+# Sobre o App
+
+Existem duas páginas. Um para gestão da Empresa e outro para gestão de Fornecedores.
+As duas páginas estão basicamente listando, criando, atualizando e excluindo suas respectivas entidades.
+Há uma barra de navegação simples para ajudar na navegação quando você não está na página inicial
