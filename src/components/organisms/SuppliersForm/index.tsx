@@ -13,8 +13,11 @@ import { formInputStyles } from './styles';
 import clsx from 'clsx';
 import { defaultInputStyle } from '../../atoms/Input/styles';
 import { CheckBox } from '../../atoms/checkbox';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Button } from '../../atoms/button';
 
 type FormSupplierProps = {
   onSubmit: SubmitHandler<FormSupplierValues>;
@@ -31,13 +34,13 @@ export const SupplierForm = ({
     name: '',
     document: '',
     documentType: 'cnpj',
-    birthDate: new Date(),
+    birthDate: undefined,
     email: '',
     rg: undefined,
     cep: '',
     ...data,
   };
-  const methods = useForm({
+  const methods = useForm<FormSupplierValues>({
     resolver: yupResolver(validationSchema),
     defaultValues,
   });
@@ -54,15 +57,15 @@ export const SupplierForm = ({
             Nome Fantasia
           </label>
           <Input
-            id="tradeName"
+            id="name"
             type="text"
-            placeholder="Nome Fantasia"
+            placeholder="Nome"
             className={clsx(
               'mt-1 block rounded-md py-2 w-full',
               defaultInputStyle,
               formInputStyles,
             )}
-            {...register('tradeName')}
+            {...register('name')}
             required
           />
         </fieldset>
@@ -149,7 +152,7 @@ export const SupplierForm = ({
                       defaultInputStyle,
                       formInputStyles,
                     )}
-                    {...register('document')}
+                    {...register('rg')}
                     required
                   />
                 </fieldset>
@@ -197,10 +200,19 @@ export const SupplierForm = ({
               defaultInputStyle,
               formInputStyles,
             )}
-            {...register('tradeName')}
+            {...register('cep')}
             required
           />
         </fieldset>
+        <div className="mt-4 flex justify-end">
+          <DialogPrimitive.Close>
+            <Button variant="danger">Cancel</Button>
+          </DialogPrimitive.Close>
+
+          <Button variant="primary" type="submit">
+            Save
+          </Button>
+        </div>
       </form>
     </FormProvider>
   );

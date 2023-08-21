@@ -1,9 +1,9 @@
 export const cepValidator = async (cep: string) => {
-  const result = await fetch(`http://cep.la/${cep}`, {
+  const response = await fetch(`${import.meta.env.VITE_CEP_LA_URL}/${cep}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
     },
   });
-  return result;
+  return response;
 };

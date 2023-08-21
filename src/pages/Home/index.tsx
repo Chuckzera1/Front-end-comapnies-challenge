@@ -3,24 +3,6 @@ import { Button } from '../../components/atoms/button';
 import { Title } from '../../components/atoms/Title';
 import { Subtitle } from '../../components/atoms/Subtitle';
 
-export const mockedData = [
-  {
-    song: 'The Sliding Mr. Bones (Next Stop, Pottersville)',
-    artist: 'Malcolm Lockyer',
-    year: '1961',
-  },
-  {
-    song: 'The Sliding Mr. Bones (Next Stop, Pottersville)',
-    artist: 'Malcolm Lockyer',
-    year: '1961',
-  },
-  {
-    song: 'The Sliding Mr. Bones (Next Stop, Pottersville)',
-    artist: 'Malcolm Lockyer',
-    year: '1961',
-  },
-];
-
 export const Home = () => {
   const navigate = useNavigate();
   const handleCompaniesNavigation = () => {

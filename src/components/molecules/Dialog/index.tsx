@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { Button } from '../../atoms/button';
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { DialogueClose, DialogueContent } from './styles';
 
 type DialogProps = {
@@ -12,6 +12,9 @@ type DialogProps = {
   buttonClassName?: string;
   children: ReactNode;
   variant: 'confirmation' | 'saveOrCancel';
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onCancel?: () => void;
 };
 
 export const Dialog = ({
@@ -20,9 +23,10 @@ export const Dialog = ({
   children,
   description,
   title,
+  isOpen,
+  setIsOpen,
+  onCancel,
 }: DialogProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogPrimitive.Trigger asChild>
@@ -60,7 +64,9 @@ export const Dialog = ({
               </DialogPrimitive.Description>
               {children}
 
-              <DialogPrimitive.Close className={DialogueClose}>
+              <DialogPrimitive.Close
+                className={DialogueClose}
+                onClick={onCancel}>
                 <Cross1Icon className="h-4 w-4 text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400" />
               </DialogPrimitive.Close>
             </DialogPrimitive.Content>

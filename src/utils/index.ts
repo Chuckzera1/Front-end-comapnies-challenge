@@ -7,7 +7,10 @@ export const capitalizeFirstLetter = (string: string) => {
 export const validateCep = async (cep: string): Promise<boolean> => {
   try {
     const response = await cepValidator(cep);
-    return response.ok;
+    if (!response.ok) return false;
+    const result = await response.json();
+    if (Array.isArray(result)) return false;
+    return true;
   } catch {
     return false;
   }

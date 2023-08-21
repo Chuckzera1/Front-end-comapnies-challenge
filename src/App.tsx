@@ -9,6 +9,7 @@ import { Header } from './components/molecules/Header';
 import { Companies } from './pages/Companies';
 import { Home } from './pages/Home';
 import { Suppliers } from './pages/Suppliers';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
 function App() {
   return (
     <div className="h-screen">
+      <ToastContainer />
       <RouterProvider router={router} />
     </div>
   );

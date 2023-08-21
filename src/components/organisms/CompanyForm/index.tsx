@@ -7,13 +7,13 @@ import { Input } from '../../atoms/Input';
 import { formInputStyles } from './styles';
 import clsx from 'clsx';
 import { defaultInputStyle } from '../../atoms/Input/styles';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Button } from '../../atoms/button';
 
 type FormCompanyProps = {
   onSubmit: SubmitHandler<FormCompanyValues>;
+  onCancel?: () => void;
   validationSchema: AnyObjectSchema;
-  data?: Company;
+  data?: Company | null;
 };
 
 export const CompanyForm = ({
@@ -98,11 +98,7 @@ export const CompanyForm = ({
             />
           </fieldset>
         </div>
-        <div className="mt-4 flex justify-end">
-          <DialogPrimitive.Close>
-            <Button variant="danger">Cancel</Button>
-          </DialogPrimitive.Close>
-
+        <div className="mt-4 flex justify-end gap-2">
           <Button variant="primary" type="submit">
             Save
           </Button>
