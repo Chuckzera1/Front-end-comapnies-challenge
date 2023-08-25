@@ -11,6 +11,7 @@ const TableStyles = {
       'px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white',
     edit: 'font-medium text-blue-600 dark:text-blue-500 hover:underline',
     remove: 'font-medium text-red-600 dark:text-red-500 hover:underline',
+    relate: 'font-medium text-green-700 dark:text-purple-400 hover:underline',
   },
 };
 
@@ -20,3 +21,4 @@ export const tableBody = clsx(TableStyles.body.container);
 export const tableBodyRowStrong = clsx(TableStyles.body.rowStrong);
 export const tableBodyEdit = clsx(TableStyles.body.edit);
 export const tableBodyRemove = clsx(TableStyles.body.remove);
+export const tableBodyRelate = clsx(TableStyles.body.relate);

@@ -1,3 +1,4 @@
+import { FormSupplierValues } from '../pages/Suppliers';
 import { cepValidator } from '../services/validateCep';
 
 export const capitalizeFirstLetter = (string: string) => {
@@ -14,4 +15,13 @@ export const validateCep = async (cep: string): Promise<boolean> => {
   } catch {
     return false;
   }
+};
+
+export const formatDataForCnpjSupplier = (values: FormSupplierValues) => {
+  const cpfInputsNull: FormSupplierValues =
+    values.documentType === 'cnpj'
+      ? { ...values, rg: null, birthDate: null }
+      : values;
+
+  return cpfInputsNull;
 };

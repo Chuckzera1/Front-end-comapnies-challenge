@@ -5,7 +5,7 @@ import { Table } from '../../components/molecules/Table';
 import { Title } from '../../components/atoms/Title';
 import { CompanyForm } from '../../components/organisms/CompanyForm';
 import { validateCep } from '../../utils';
-import { Company, CompanyKeysEnum } from '../../types/entities/company';
+import { Company, CompanyKeys } from '../../types/entities/company';
 import {
   listCompaniesRoute,
   createCompanyRoute,
@@ -15,8 +15,11 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { CompanyDTO } from '../../types/DTO/company';
+import { Supplier } from '../../types/entities/supplier';
 
 export type FormCompanyValues = {
+  id?: string;
   tradeName: string;
   document: string;
   cep: string;
@@ -30,10 +33,19 @@ const formSchema = yup.object().shape({
 
 export const Companies = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [editEntity, setEditEntity] = useState<Company | null>(null);
+  const [editEntity, setEditEntity] = useState<CompanyDTO | null>(null);
+  const [companySuppliersId, setCompanySuppliersId] = useState<
+    Supplier['id'][]
+  >([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const [data, setData] = useState<Company[]>([]);
+
+  const onCloseDialog = useCallback(() => {
+    setEditEntity(null);
+    setCompanySuppliersId([]);
+    setIsOpen(false);
+  }, []);
 
   const getCompaniesData = useCallback(async () => {
     try {
@@ -46,15 +58,24 @@ export const Companies = () => {
   }, [searchTerm]);
 
   const createCompany = useCallback(
-    async (values: Omit<Company, 'id'>) => {
+    async (values: Omit<CompanyDTO, 'id'>) => {
       try {
+        const isCepValid = await validateCep(values.cep);
+        if (!isCepValid) {
+          toast.error('CEP inválido! Por favor, verifique o CEP');
+          return;
+        }
+
         const response = await createCompanyRoute(values);
         const result = await response.json();
+
         if (!response.ok) {
           toast.error(result.message);
           return;
         }
+
         setIsOpen(false);
+        toast.success('Empresa criada com sucesso');
         await getCompaniesData();
       } catch (err) {
         toast.error('Um erro ocorreu ao tentar criar empresa');
@@ -64,37 +85,38 @@ export const Companies = () => {
   );
 
   const editCompany = useCallback(
-    async (values: Omit<Company, 'id'>) => {
+    async (values: CompanyDTO) => {
       try {
+        const isCepValid = await validateCep(values.cep);
+        if (!isCepValid) {
+          toast.error('CEP inválido! Por favor, verifique o CEP');
+          return;
+        }
+        if (!editEntity?.id) {
+          toast.error('Um erro ocorreu ao tentar editar. Tente novamente');
+          onCloseDialog();
+          return;
+        }
+
         if (!editEntity) return;
-        const response = await updateCompanyRoute(editEntity?.id, values);
+
+        const response = await updateCompanyRoute(editEntity.id, values);
         const result = await response.json();
+
         if (!response.ok) {
           toast.error(result.message);
           return;
         }
-        setEditEntity(null);
-        setIsOpen(false);
+        onCloseDialog();
+        toast.success('Empresa editada com sucesso');
         await getCompaniesData();
       } catch (err) {
-        toast.error('Um erro ocorreu ao tentar criar empresa');
-        setEditEntity(null);
-        setIsOpen(false);
+        toast.error('Um erro ocorreu ao tentar editar empresa');
+        onCloseDialog();
       }
     },
-    [getCompaniesData, editEntity],
+    [editEntity, getCompaniesData, onCloseDialog],
   );
-
-  const onSubmit = async (values: FormCompanyValues) => {
-    const isCepValid = await validateCep(values.cep);
-    if (!isCepValid) {
-      console.log('inválido');
-      toast.error('CEP inválido! Por favor, verifique o CEP');
-      return;
-    }
-    if (!editEntity) return createCompany(values);
-    return editCompany(values);
-  };
 
   const removeCompany = useCallback(
     async ({ id, name }: { id: string; name: string }) => {
@@ -110,12 +132,8 @@ export const Companies = () => {
 
   const handleOnEdit = useCallback((values: Company) => {
     setEditEntity(values);
+    setCompanySuppliersId(values.suppliers.map(({ id }) => id));
     setIsOpen(true);
-  }, []);
-
-  const onCancel = useCallback(() => {
-    setEditEntity(null);
-    setIsOpen(false);
   }, []);
 
   useEffect(() => {
@@ -138,23 +156,26 @@ export const Companies = () => {
             isOpen={isOpen}
             buttonLabel="Nova Empresa"
             variant="saveOrCancel"
-            title="Nova Empresa"
-            description="Adicionar Empresa"
-            onCancel={onCancel}>
+            title={editEntity ? 'Editar Empresa' : 'Nova Empresa'}
+            description={
+              editEntity ? 'Altere os dados da Empresa' : 'Adicionar Empresa'
+            }
+            onCancel={onCloseDialog}>
             <CompanyForm
-              onSubmit={onSubmit}
+              onSubmit={createCompany}
+              onEdit={editCompany}
               validationSchema={formSchema}
               data={editEntity}
-              onCancel={onCancel}
+              companySuppliersIds={companySuppliersId}
             />
           </Dialog>
         </div>
       </div>
       <Table
-        keys={Object.keys(CompanyKeysEnum)}
-        keysTitleEnum={CompanyKeysEnum}
+        keys={Object.keys(CompanyKeys)}
+        keysTitleEnum={CompanyKeys}
         data={data}
-        handleOnDelete={props => removeCompany(props)}
+        handleOnDelete={removeCompany}
         handleOnEdit={handleOnEdit}
       />
     </div>

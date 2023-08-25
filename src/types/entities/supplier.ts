@@ -16,8 +16,8 @@ export type Supplier = {
   name: string;
   document: string;
   documentType: SupplierDocumentType;
-  rg?: string;
+  rg?: string | null;
   email: string;
   cep: string;
-  birthDate?: Date;
+  birthDate?: Date | null;
 };

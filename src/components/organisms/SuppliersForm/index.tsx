@@ -4,6 +4,7 @@ import {
   SubmitHandler,
   useForm,
   Controller,
+  FieldErrors,
 } from 'react-hook-form';
 import { FormSupplierValues } from '../../../pages/Suppliers';
 import { AnyObjectSchema } from 'yup';
@@ -13,30 +14,35 @@ import { formInputStyles } from './styles';
 import clsx from 'clsx';
 import { defaultInputStyle } from '../../atoms/Input/styles';
 import { CheckBox } from '../../atoms/checkbox';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Button } from '../../atoms/button';
+import { subYears } from 'date-fns';
+import { toast } from 'react-toastify';
 
 type FormSupplierProps = {
   onSubmit: SubmitHandler<FormSupplierValues>;
+  onEdit: SubmitHandler<FormSupplierValues>;
   validationSchema: AnyObjectSchema;
-  data?: Supplier;
+  data?: Supplier | null;
 };
 
 export const SupplierForm = ({
   onSubmit,
+  onEdit,
   validationSchema,
   data,
 }: FormSupplierProps) => {
+  const fifteenYearsAgo = subYears(new Date(), 15).getFullYear();
   const defaultValues: FormSupplierValues = {
+    id: null,
     name: '',
     document: '',
     documentType: 'cnpj',
-    birthDate: undefined,
+    birthDate: null,
     email: '',
-    rg: undefined,
+    rg: null,
     cep: '',
     ...data,
   };
@@ -45,16 +51,23 @@ export const SupplierForm = ({
     defaultValues,
   });
   const { register, handleSubmit, watch, control } = methods;
+  const onInvalid = (errors: FieldErrors<FormSupplierValues>) => {
+    toast.error(Object.values(errors)[0].message);
+  };
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={
+          data?.id
+            ? handleSubmit(onEdit, onInvalid)
+            : handleSubmit(onSubmit, onInvalid)
+        }
         className="mt-2 space-y-2 flex flex-col gap-3">
         <fieldset>
           <label
-            htmlFor="tradeName"
+            htmlFor="name"
             className="text-xs font-medium text-gray-700 dark:text-gray-400">
-            Nome Fantasia
+            Nome
           </label>
           <Input
             id="name"
@@ -66,6 +79,25 @@ export const SupplierForm = ({
               formInputStyles,
             )}
             {...register('name')}
+            required
+          />
+        </fieldset>
+        <fieldset>
+          <label
+            htmlFor="email"
+            className="text-xs font-medium text-gray-700 dark:text-gray-400">
+            E-mail
+          </label>
+          <Input
+            id="email"
+            type="text"
+            placeholder="E-mail"
+            className={clsx(
+              'mt-1 block rounded-md py-2 w-full',
+              defaultInputStyle,
+              formInputStyles,
+            )}
+            {...register('email')}
             required
           />
         </fieldset>
@@ -125,7 +157,6 @@ export const SupplierForm = ({
                     id="cpf"
                     type="text"
                     placeholder="CPF"
-                    mask="999.999.999-99"
                     className={clsx(
                       'mt-1 block rounded-md py-2',
                       defaultInputStyle,
@@ -169,11 +200,16 @@ export const SupplierForm = ({
                   render={({ field }) => (
                     <ReactDatePicker
                       id="birthDate"
+                      autoComplete="off"
                       className={clsx(
                         'mt-1 block rounded-md py-2',
                         defaultInputStyle,
                         formInputStyles,
                       )}
+                      dateFormat="dd/MM/yyyy"
+                      maxDate={
+                        new Date(`${fifteenYearsAgo}-12-31T00:00:00.000`)
+                      }
                       placeholderText="Select date"
                       onChange={date => field.onChange(date)}
                       selected={field.value}
@@ -205,10 +241,6 @@ export const SupplierForm = ({
           />
         </fieldset>
         <div className="mt-4 flex justify-end">
-          <DialogPrimitive.Close>
-            <Button variant="danger">Cancel</Button>
-          </DialogPrimitive.Close>
-
           <Button variant="primary" type="submit">
             Save
           </Button>
