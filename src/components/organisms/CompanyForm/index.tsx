@@ -15,6 +15,7 @@ import { listSuppliersRoute } from '../../../services/suppliers';
 import { toast } from 'react-toastify';
 import { Supplier } from '../../../types/entities/supplier';
 import { vinculateSupplierToCompanyRoute } from '../../../services/company';
+import { removeAccents } from '../../../utils';
 
 type FormCompanyProps = {
   onSubmit: SubmitHandler<FormCompanyValues>;
@@ -35,20 +36,36 @@ export const CompanyForm = ({
 }: FormCompanyProps) => {
   const [supplierData, setSupplierData] = useState<Supplier[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const suppliersNotRelated = useMemo(
-    () => supplierData.filter(({ id }) => !companySuppliersIds.includes(id)),
-    [companySuppliersIds, supplierData],
-  );
+
+  const suppliersNotRelated = useMemo(() => {
+    if (!supplierData) return [];
+
+    let suppliersToFilter = supplierData.filter(
+      ({ id }) => !companySuppliersIds.includes(id),
+    );
+    const searchSplits = removeAccents(searchTerm)
+      .split(' ')
+      .filter(f => f || null);
+
+    searchSplits.forEach(
+      s =>
+        (suppliersToFilter = suppliersToFilter.filter(
+          f =>
+            f.name.toLowerCase().indexOf(s) > -1 || f.document.indexOf(s) > -1,
+        )),
+    );
+    return suppliersToFilter;
+  }, [companySuppliersIds, searchTerm, supplierData]);
 
   const getSuppliersData = useCallback(async () => {
     try {
-      const response = await listSuppliersRoute(searchTerm);
+      const response = await listSuppliersRoute();
       setSupplierData(response);
     } catch (err) {
       setSupplierData([]);
       toast.error('Um erro ocorreu ao tentar listar as fornecedores');
     }
-  }, [searchTerm]);
+  }, []);
 
   const vinculateToCompany = useCallback(
     async (supplierId: string) => {
