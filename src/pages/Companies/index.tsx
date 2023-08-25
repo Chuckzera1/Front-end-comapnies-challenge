@@ -164,6 +164,7 @@ export const Companies = () => {
             <CompanyForm
               onSubmit={createCompany}
               onEdit={editCompany}
+              refresh={getCompaniesData}
               validationSchema={formSchema}
               data={editEntity}
               companySuppliersIds={companySuppliersId}

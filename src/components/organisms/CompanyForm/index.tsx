@@ -19,6 +19,7 @@ import { vinculateSupplierToCompanyRoute } from '../../../services/company';
 type FormCompanyProps = {
   onSubmit: SubmitHandler<FormCompanyValues>;
   onEdit: SubmitHandler<FormCompanyValues>;
+  refresh: () => void;
   validationSchema: AnyObjectSchema;
   data?: CompanyDTO | null;
   companySuppliersIds?: Supplier['id'][];
@@ -27,6 +28,7 @@ type FormCompanyProps = {
 export const CompanyForm = ({
   onSubmit,
   onEdit,
+  refresh,
   validationSchema,
   data,
   companySuppliersIds = [],
@@ -56,11 +58,12 @@ export const CompanyForm = ({
         toast.success('Vinculado com sucesso');
         companySuppliersIds.push(supplierId);
         getSuppliersData();
+        refresh();
       } catch {
         toast.error('Um erro ocorreu ao tentar víncular fornecedor à empresa');
       }
     },
-    [data?.id],
+    [companySuppliersIds, data?.id, getSuppliersData, refresh],
   );
 
   const defaultValues: FormCompanyValues = {

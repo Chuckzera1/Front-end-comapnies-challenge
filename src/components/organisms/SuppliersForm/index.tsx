@@ -157,6 +157,7 @@ export const SupplierForm = ({
                     id="cpf"
                     type="text"
                     placeholder="CPF"
+                    mask="999.999.999-99"
                     className={clsx(
                       'mt-1 block rounded-md py-2',
                       defaultInputStyle,
